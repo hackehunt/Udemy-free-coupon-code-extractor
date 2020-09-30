@@ -1,19 +1,24 @@
+#This is a webscraping python programme used to extract udemy coupons
+
+#--++--------------------------------
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-
+#--++--------------------------------
 
 title_list=[]
 img_list=[]
 link_list=[]
 
-
+#--++--------------------------------
 
 base_url="https://udemycoupon.learnviral.com/page/"
 r=requests.get('https://udemycoupon.learnviral.com',headers={'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'})
 soup=BeautifulSoup(r.content, "html.parser")
 page_num_class=soup.find_all("a", {"class":"page-numbers"})
 page=page_num_class[-2].text.replace(",","")
+
+#--++--------------------------------
 
 for i in range(1,int(page)-1):
     url=base_url + str(i)
@@ -38,7 +43,9 @@ for i in range(1,int(page)-1):
             link_list.append(link['href'])
         except:
             link_list.append('None')
-
+   
+#--++---------------------------------
+            
     df=pd.DataFrame({"Title":title_list, "Img link": img_list, "Link":link_list})
     df.to_csv("output.csv")
     print('Done {%s} \n' %url)
